@@ -59,7 +59,7 @@ namespace GestaoClix
 
         private void btnLimparCliente_Click(object sender, EventArgs e)
         {
-            LimparSelecaoClientes();
+            LimparSelecao();
         }
 
         private void dgvClientes_SelectionChanged(object sender, EventArgs e)
@@ -74,11 +74,11 @@ namespace GestaoClix
             catch { }
         }
 
-        private void rbt_CheckedChanged(object sender, EventArgs e)
+        private void rbtCliente_CheckedChanged(object sender, EventArgs e)
         {
             if (rbtAdicionarCliente.Checked)
             {
-                LimparSelecaoClientes();
+                LimparSelecao();
                 dgvClientes.Enabled = false;
                 txtNifCliente.ReadOnly = false;
                 txtSituacaoCliente.ReadOnly = false;
@@ -87,7 +87,7 @@ namespace GestaoClix
             }
             else if (rbtAtualizarCliente.Checked)
             {
-                LimparSelecaoClientes();
+                LimparSelecao();
                 dgvClientes.Enabled = true;
                 txtNifCliente.ReadOnly = false;
                 txtSituacaoCliente.ReadOnly = false;
@@ -96,7 +96,7 @@ namespace GestaoClix
             }
             else if (rbtRemoverCliente.Checked)
             {
-                LimparSelecaoClientes();
+                LimparSelecao();
                 dgvClientes.Enabled = true;
                 txtNifCliente.ReadOnly = true;
                 txtSituacaoCliente.ReadOnly = true;
@@ -105,19 +105,29 @@ namespace GestaoClix
             }
         }
 
-        private void LimparSelecaoClientes()
+        private void LimparSelecao()
         {
+            // Clientes
             txtIdCliente.Clear();
             txtNifCliente.Clear();
             txtNomeCliente.Clear();
             txtSituacaoCliente.Clear();
             dgvClientes.ClearSelection();
+
+            // Movimentos
+            txtIdMovimento.Clear();
+            txtDescricaoMovimento.Clear();
+            txtSituacaoMovimento.Clear();
+            cbxClienteMovimento.ResetText();
+            cbxTipoMovimento.ResetText();
+            dtpMovimento.ResetText();
+            dgvMovimentos.ClearSelection();
         }
 
         private void PreencherDgvClientes()
         {
             dgvClientes.DataSource = gestorCliente.ListarClientes();
-            LimparSelecaoClientes();
+            LimparSelecao();
         }
 
 
@@ -139,6 +149,48 @@ namespace GestaoClix
             gestorMovimento.AdicionarMovimento(data, descricao, valor, situacao, clienteId, tipoId);
         }
 
+        private void rbtMovimento_Changed(object sender, EventArgs e)
+        {
+            if (rbtAdicionarMovimento.Checked)
+            {
+                LimparSelecao();
+                dgvMovimentos.Enabled = false;
+                txtDescricaoMovimento.ReadOnly = false;
+                txtSituacaoMovimento.ReadOnly = false;
+                cbxClienteMovimento.Enabled = true;
+                cbxTipoMovimento.Enabled = true;
+                dtpMovimento.Enabled = true;
+                dupValorMovimento.Enabled = true;
+                dupValorMovimento.ResetText();
+                btnMovimentos.Text = "ADICIONAR";
+            }
+            else if (rbtAtualizarMovimento.Checked)
+            {
+                LimparSelecao();
+                dgvMovimentos.Enabled = true;
+                txtDescricaoMovimento.ReadOnly = false;
+                txtSituacaoMovimento.ReadOnly = false;
+                cbxClienteMovimento.Enabled = true;
+                cbxTipoMovimento.Enabled = true;
+                dtpMovimento.Enabled = true;
+                dupValorMovimento.Enabled = true;
+                dupValorMovimento.ResetText();
+                btnMovimentos.Text = "ATUALIZAR";
+            }
+            else if (rbtRemoverMovimento.Checked)
+            {
+                LimparSelecao();
+                dgvMovimentos.Enabled = true;
+                txtDescricaoMovimento.ReadOnly = true;
+                txtSituacaoMovimento.ReadOnly = true;
+                cbxClienteMovimento.Enabled = false;
+                cbxTipoMovimento.Enabled = false;
+                dtpMovimento.Enabled = false;
+                dupValorMovimento.Enabled = false;
+                btnMovimentos.Text = "REMOVER";
+            }
+        }
+
         private void PreencherComboBoxMovimento()
         {
             cbxTipoMovimento.DataSource = gestorTipo.ListarTipos();
@@ -150,5 +202,19 @@ namespace GestaoClix
             cbxClienteMovimento.ValueMember = "Id";
         }
 
+        private void dgvMovimentos_SelectionChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                txtIdMovimento.Text = dgvMovimentos.SelectedCells[0].Value.ToString();
+                txtDescricaoMovimento.Text = dgvMovimentos.SelectedCells[1].Value.ToString();
+                txtSituacaoMovimento.Text = dgvMovimentos.SelectedCells[2].Value.ToString();
+                dtpMovimento.Text = dgvMovimentos.SelectedCells[3].Value.ToString();
+                cbxClienteMovimento.SelectedValue = dgvMovimentos.SelectedCells[5].Value;
+                dupValorMovimento.Text = dgvMovimentos.SelectedCells[6].Value.ToString();
+                cbxTipoMovimento.SelectedValue = dgvMovimentos.SelectedCells[8].Value;
+            }
+            catch { }
+        }
     }
 }

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Runtime.InteropServices.ObjectiveC;
+using Microsoft.EntityFrameworkCore;
 
 namespace GestaoClix.Controllers
 {
@@ -16,8 +18,7 @@ namespace GestaoClix.Controllers
 
         public void AdicionarMovimento(DateTime data, string descricao, decimal valor, string situacao, int clienteId, int tipoId)
         {
-            try
-            {
+
                 movimento = new Movimento(data, descricao, valor, situacao, clienteId, tipoId);
 
                 if (database.Movimento is not null && movimento is not null)
@@ -27,19 +28,27 @@ namespace GestaoClix.Controllers
                 }
 
                 movimento = null;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
 
-        public List<Movimento>? ListarMovimentos()
+        public List<ListaMovimento>? ListarMovimentos()
         {
-            List<Movimento>? listaMovimentos = null;
+            List<ListaMovimento>? listaMovimentos = null;
 
             if (database.Movimento is not null)
-                listaMovimentos = database.Movimento.ToList();
+            {
+                listaMovimentos = database.Movimento.Select(movimento => new ListaMovimento
+                    {
+                        Id = movimento.Id,
+                        Descricao = movimento.Descricao,
+                        Situacao = movimento.Situacao,
+                        Data = movimento.Data,
+                        Cliente = movimento.Cliente.Nome,
+                        ClienteId = movimento.ClienteId,
+                        Valor = movimento.Valor,
+                        Tipo = movimento.Tipo.Designacao,
+                        TipoId = movimento.TipoId
+                    }).ToList();
+            }
 
             return listaMovimentos;
         }

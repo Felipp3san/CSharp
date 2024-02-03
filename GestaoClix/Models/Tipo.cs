@@ -10,7 +10,7 @@ namespace GestaoClix.Models
     {
         public int Id { get; set; }
         public string Designacao { get; set; }
-        public Tipo(int id, string designacao)
+        public Tipo(string designacao)
         {
             Designacao = designacao;
         }
