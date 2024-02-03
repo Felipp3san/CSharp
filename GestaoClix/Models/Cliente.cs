@@ -12,10 +12,11 @@ namespace GestaoClix.Models
         public string Nome { get; set; }
         public string Nif { get; set; }
         public string Situacao { get; set; }
-        public Cliente(string nome, string nif, string situacao) 
+
+        public Cliente(string nif, string nome, string situacao) 
         {
-            Nome = nome;
             Nif = nif;
+            Nome = nome;
             Situacao = situacao;
         }
     }

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace GestaoClix.Migrations
 {
-    [DbContext(typeof(Context))]
+    [DbContext(typeof(Database))]
     [Migration("20240127001022_PRIMEIRO")]
     partial class PRIMEIRO
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GestaoClix.Data
 {
-    internal class Context : DbContext
+    internal class Database : DbContext
     {
         public DbSet<Cliente>? Cliente { get; set; }
         public DbSet<Movimento>? Movimento { get; set; }
