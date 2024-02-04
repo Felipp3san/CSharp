@@ -14,7 +14,7 @@ namespace GestaoClix.Controllers
 {
     internal class GestorMovimento
     {
-        Database database = new Database();
+        Database database = Database.getInstance();
         Movimento? movimento = null;
 
         public void AdicionarMovimento(DateTime data, string descricao, decimal valor, string situacao, int clienteId, int tipoId)

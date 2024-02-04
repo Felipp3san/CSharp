@@ -10,21 +10,26 @@ namespace GestaoClix.Controllers
 {
     internal class GestorTipo
     {
-        Database database = new Database();
+        Database database = Database.getInstance();
 
-        public List<Tipo> ListarTipos()
+        public List<Tipo>? ListarTipos()
         {
             List<Tipo>? listaTipos = null;
 
             if (database.Movimento is not null)
-                listaTipos = database.Tipo.ToList();
+                listaTipos = [.. database.Tipo];
 
             return listaTipos;
         }
 
-        public Tipo BuscarTipo(string idTipo)
+        public Tipo? BuscarTipo(string idTipo)
         {
-            var tipo = database.Tipo.Find(idTipo);
+
+            Tipo? tipo = null;
+
+            if (database.Tipo is not null)
+                tipo = database.Tipo.Find(idTipo);
+
             return tipo;
         }
     }

@@ -13,7 +13,7 @@ namespace GestaoClix.Controllers
     internal class GestorCliente
     {
 
-        Database database = new Database();
+        Database database = Database.getInstance();
         Cliente? cliente = null;
 
         public void adicionarCliente(string nif, string nome, string situacao)
@@ -85,7 +85,7 @@ namespace GestaoClix.Controllers
             List<Cliente>? listaClientes = null;
 
             if (database.Cliente is not null)
-                listaClientes = database.Cliente.ToList();
+                listaClientes = [.. database.Cliente];
             
             return listaClientes;
         }
