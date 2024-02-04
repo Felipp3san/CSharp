@@ -33,7 +33,7 @@
             txtNifCliente = new TextBox();
             txtSituacaoCliente = new TextBox();
             dgvMovimentos = new DataGridView();
-            btnGestaoListar = new Button();
+            btnLimparMovimento = new Button();
             tabGestao = new TabControl();
             tabMovimentos = new TabPage();
             rbtAtualizarMovimento = new RadioButton();
@@ -131,17 +131,17 @@
             dgvMovimentos.TabIndex = 4;
             dgvMovimentos.SelectionChanged += dgvMovimentos_SelectionChanged;
             // 
-            // btnGestaoListar
+            // btnLimparMovimento
             // 
-            btnGestaoListar.Font = new Font("Segoe UI", 14F);
-            btnGestaoListar.Location = new Point(6, 571);
-            btnGestaoListar.Margin = new Padding(3, 2, 3, 2);
-            btnGestaoListar.Name = "btnGestaoListar";
-            btnGestaoListar.Size = new Size(979, 43);
-            btnGestaoListar.TabIndex = 5;
-            btnGestaoListar.Text = "LISTAR";
-            btnGestaoListar.UseVisualStyleBackColor = true;
-            btnGestaoListar.Click += btnGestaoListar_Click;
+            btnLimparMovimento.Font = new Font("Segoe UI", 14F);
+            btnLimparMovimento.Location = new Point(6, 571);
+            btnLimparMovimento.Margin = new Padding(3, 2, 3, 2);
+            btnLimparMovimento.Name = "btnLimparMovimento";
+            btnLimparMovimento.Size = new Size(979, 43);
+            btnLimparMovimento.TabIndex = 5;
+            btnLimparMovimento.Text = "LIMPAR";
+            btnLimparMovimento.UseVisualStyleBackColor = true;
+            btnLimparMovimento.Click += btnLimparMovimento_Click;
             // 
             // tabGestao
             // 
@@ -174,7 +174,7 @@
             tabMovimentos.Controls.Add(dtpMovimento);
             tabMovimentos.Controls.Add(cbxClienteMovimento);
             tabMovimentos.Controls.Add(dgvMovimentos);
-            tabMovimentos.Controls.Add(btnGestaoListar);
+            tabMovimentos.Controls.Add(btnLimparMovimento);
             tabMovimentos.Location = new Point(4, 24);
             tabMovimentos.Name = "tabMovimentos";
             tabMovimentos.Padding = new Padding(3);
@@ -320,7 +320,7 @@
             btnMovimentos.Name = "btnMovimentos";
             btnMovimentos.Size = new Size(979, 38);
             btnMovimentos.TabIndex = 12;
-            btnMovimentos.Text = "ADICIONAR";
+            btnMovimentos.Text = "ATUALIZAR";
             btnMovimentos.UseVisualStyleBackColor = true;
             btnMovimentos.Click += btnMovimentos_Click;
             // 
@@ -354,7 +354,7 @@
             dupValorMovimento.Name = "dupValorMovimento";
             dupValorMovimento.Size = new Size(309, 32);
             dupValorMovimento.TabIndex = 9;
-            dupValorMovimento.Text = "100";
+            dupValorMovimento.Text = "100,00";
             // 
             // txtDescricaoMovimento
             // 
@@ -559,7 +559,7 @@
         private TextBox txtNifCliente;
         private TextBox txtSituacaoCliente;
         private DataGridView dgvMovimentos;
-        private Button btnGestaoListar;
+        private Button btnLimparMovimento;
         private TabControl tabGestao;
         private TabPage tabMovimentos;
         private TabPage tabGestaoClientes;

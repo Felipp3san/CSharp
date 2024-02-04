@@ -11,7 +11,7 @@ namespace GestaoClix.Models
         public int Id { get; set; }
         public string Descricao { get; set; }
         public string Situacao { get; set; }
-        public DateTime Data {  get; set; }
+        public string Data {  get; set; }
         public string Cliente { get; set; }
         public int ClienteId { get; set; }
         public decimal Valor { get; set; }

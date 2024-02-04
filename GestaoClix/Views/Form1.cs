@@ -18,6 +18,7 @@ namespace GestaoClix
         private void Form1_Load(object sender, EventArgs e)
         {
             PreencherDgvClientes();
+            PreencherDgvMovimentos();
             PreencherComboBoxMovimento();
         }
 
@@ -118,8 +119,8 @@ namespace GestaoClix
             txtIdMovimento.Clear();
             txtDescricaoMovimento.Clear();
             txtSituacaoMovimento.Clear();
-            cbxClienteMovimento.ResetText();
-            cbxTipoMovimento.ResetText();
+            cbxClienteMovimento.SelectedIndex = -1;
+            cbxTipoMovimento.SelectedIndex = -1;
             dtpMovimento.ResetText();
             dgvMovimentos.ClearSelection();
         }
@@ -132,21 +133,60 @@ namespace GestaoClix
 
 
         // Gestão de movimentos
-        private void btnGestaoListar_Click(object sender, EventArgs e)
-        {
-            dgvMovimentos.DataSource = gestorMovimento.ListarMovimentos();
-        }
-
         private void btnMovimentos_Click(object sender, EventArgs e)
         {
+            string idMovimento = txtIdMovimento.Text;
             DateTime data = dtpMovimento.Value;
             string descricao = txtDescricaoMovimento.Text;
-            decimal valor = Convert.ToDecimal(dupValorMovimento.Text);
             string situacao = txtSituacaoMovimento.Text;
             int clienteId = Convert.ToInt16(cbxClienteMovimento.SelectedValue);
             int tipoId = Convert.ToInt16(cbxTipoMovimento.SelectedValue);
+            decimal valor = 0.0m;
 
-            gestorMovimento.AdicionarMovimento(data, descricao, valor, situacao, clienteId, tipoId);
+            try
+            {
+                valor = Convert.ToDecimal(dupValorMovimento.Text);
+            }
+            catch
+            {
+                MessageBox.Show("Preencha o camp 'Valor' corretamente.");
+                return;
+            }
+
+            if (rbtAdicionarMovimento.Checked)
+            {
+                if (!string.IsNullOrWhiteSpace(descricao) && !string.IsNullOrWhiteSpace(situacao) && clienteId != 0 && tipoId != 0)
+                {
+                    gestorMovimento.AdicionarMovimento(data, descricao, valor, situacao, clienteId, tipoId);
+                }
+                else
+                {
+                    MessageBox.Show("Preencha os campos corretamente.");
+                }
+            }
+            else if (rbtAtualizarMovimento.Checked)
+            {
+                if (dgvMovimentos.SelectedRows.Count > 0)
+                    gestorMovimento.AtualizarMovimento(idMovimento, data, descricao, situacao, valor, clienteId, tipoId);
+                else
+                    MessageBox.Show("Selecione um movimento da tabela para atualizar.");
+            }
+            else if (rbtRemoverMovimento.Checked)
+            {
+                if (dgvMovimentos.SelectedRows.Count > 0)
+                {
+                    gestorMovimento.RemoverMovimento(idMovimento);
+                }
+                else
+                    MessageBox.Show("Selecione um cliente da tabela para remover.");
+            }
+
+            PreencherDgvMovimentos();
+        }
+
+        private void btnLimparMovimento_Click(object sender, EventArgs e)
+        {
+            LimparSelecao();
         }
 
         private void rbtMovimento_Changed(object sender, EventArgs e)
@@ -161,7 +201,7 @@ namespace GestaoClix
                 cbxTipoMovimento.Enabled = true;
                 dtpMovimento.Enabled = true;
                 dupValorMovimento.Enabled = true;
-                dupValorMovimento.ResetText();
+                dupValorMovimento.Text = "0,0";
                 btnMovimentos.Text = "ADICIONAR";
             }
             else if (rbtAtualizarMovimento.Checked)
@@ -174,7 +214,7 @@ namespace GestaoClix
                 cbxTipoMovimento.Enabled = true;
                 dtpMovimento.Enabled = true;
                 dupValorMovimento.Enabled = true;
-                dupValorMovimento.ResetText();
+                dupValorMovimento.Text = "0,0";
                 btnMovimentos.Text = "ATUALIZAR";
             }
             else if (rbtRemoverMovimento.Checked)
@@ -202,6 +242,12 @@ namespace GestaoClix
             cbxClienteMovimento.ValueMember = "Id";
         }
 
+        private void PreencherDgvMovimentos()
+        {
+            dgvMovimentos.DataSource = gestorMovimento.ListarMovimentos();
+            LimparSelecao();
+        }
+
         private void dgvMovimentos_SelectionChanged(object sender, EventArgs e)
         {
             try
@@ -216,5 +262,6 @@ namespace GestaoClix
             }
             catch { }
         }
+
     }
 }
