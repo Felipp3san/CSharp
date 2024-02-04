@@ -245,6 +245,8 @@ namespace GestaoClix
         private void PreencherDgvMovimentos()
         {
             dgvMovimentos.DataSource = gestorMovimento.ListarMovimentos();
+            dgvMovimentos.Columns["ClienteId"].Visible = false;
+            dgvMovimentos.Columns["TipoId"].Visible = false;
             LimparSelecao();
         }
 
