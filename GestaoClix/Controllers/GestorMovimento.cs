@@ -184,18 +184,5 @@ namespace GestaoClix.Controllers
 
             return listaMovimentos;
         }
-
-        public List<ListaMovimento>? ListarClientesNegativos()
-        {
-            List<ListaMovimento>? listaMovimentos = null;
-
-            if (database.Movimento is not null)
-            {
-
-            }
-
-            return listaMovimentos;
-        }
-
     }
 }

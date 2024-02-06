@@ -90,6 +90,62 @@ namespace GestaoClix.Controllers
             return listaClientes;
         }
 
+        public List<ListaClientesSaldos>? ListarClientesNegativos()
+        {
+            List<ListaClientesSaldos>? listaClientesNegativos = null;
+
+            if (database.Movimento is not null)
+            {
+                listaClientesNegativos = database.Movimento
+                    .Select(movimento => new
+                    {
+                        Cliente = movimento.Cliente.Nome,
+                        Valor = movimento.Valor,
+                    })
+                    .ToList()
+                    .GroupBy(movimento => movimento.Cliente)
+                    .Select(grupo => new ListaClientesSaldos
+                    {
+                        Cliente = grupo.Key,
+                        Valor = grupo.Sum(movimento => movimento.Valor)
+                    })
+                    .Where(movimento => movimento.Valor < -1000)
+                    .ToList();
+            }
+
+            return listaClientesNegativos;
+        }
+
+        public List<ListaClientesSaldos>? ListarClientesSemMarcador(string marcador)
+        {
+            List<ListaClientesSaldos>? listaClientesSemMarcador = null;
+
+            if (database.Movimento is not null && database.Cliente is not null)
+            {
+                listaClientesSemMarcador = database.Movimento
+                    .Join(database.Cliente,
+                    movimento => movimento.ClienteId,
+                    cliente => cliente.Id,
+                    (movimento, cliente) => new
+                    {
+                        Cliente = cliente.Nome,
+                        Valor = movimento.Valor,
+                        Situacao = cliente.Situacao,
+                    })
+                    .Where(cliente => cliente.Situacao != marcador)
+                    .ToList()
+                    .GroupBy(cliente => cliente.Cliente)
+                    .Select(grupo => new ListaClientesSaldos
+                    {
+                        Cliente = grupo.Key,
+                        Valor = grupo.Sum(movimento => movimento.Valor)
+                    })
+                    .ToList();
+            }
+
+            return listaClientesSemMarcador;
+        }
+
         public Cliente? BuscarCliente(string idCliente)
         {
             cliente = null;

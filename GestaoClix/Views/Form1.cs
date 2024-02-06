@@ -51,6 +51,8 @@ namespace GestaoClix
             }
 
             PreencherDgvClientes();
+            PreencherComboBoxMovimento();
+            PreencherComboBoxListagem();
         }
 
         private void AdicionarCliente(string nif, string nome, string situacao)
@@ -69,8 +71,7 @@ namespace GestaoClix
             var result = MessageBox.Show(mensagem, cabecalho, MessageBoxButtons.YesNo);
 
             if (!string.IsNullOrWhiteSpace(txtNifCliente.Text)
-                && !string.IsNullOrWhiteSpace(txtNomeCliente.Text)
-                    && !string.IsNullOrWhiteSpace(txtSituacaoCliente.Text))
+                && !string.IsNullOrWhiteSpace(txtNomeCliente.Text))
 
                 if (result == DialogResult.Yes)
                     gestorCliente.AdicionarCliente(nif, nome, situacao);
@@ -288,13 +289,15 @@ namespace GestaoClix
         }
 
 
-        // Movimentos
+        // Listagens
         private void btnListar_Click(object sender, EventArgs e)
         {
             if (rbtListagemClienteMesAno.Checked)
                 ListarPorClienteMesAno();
             else if (rbtListagemClientesNegativos.Checked)
                 ListarClientesNegativos();
+            else if (rbtListagemClientesSemMarcador.Checked)
+                ListarClientesSemMarcador();
         }
 
         private void ListarPorClienteMesAno()
@@ -315,22 +318,14 @@ namespace GestaoClix
 
         private void ListarClientesNegativos()
         {
-            dgvListagens.DataSource = gestorMovimento.ListarClientesNegativos();
+            dgvListagens.DataSource = gestorCliente.ListarClientesNegativos();
         }
 
-        private void CalcularSaldo()
+        private void ListarClientesSemMarcador()
         {
-            if (dgvListagens.DataSource != null)
-            {
-                decimal total = 0;
+            string marcador = txtMarcadorListagem.Text;
 
-                foreach(DataGridViewRow row in dgvListagens.Rows)
-                {
-                    total += (decimal)row.Cells["Valor"].Value;
-                }
-
-                // total.ToString("C2", culture);
-            }
+            dgvListagens.DataSource = gestorCliente.ListarClientesSemMarcador(marcador);
         }
 
         private void PreencherComboBoxListagem()
@@ -363,6 +358,26 @@ namespace GestaoClix
             cbxMesListagem.ValueMember = "Id";
         }
 
+        private void rbtListagemClienteMesAno_CheckedChanged(object sender, EventArgs e)
+        {
+            if (rbtListagemClienteMesAno.Checked)
+            {
+                cbxClienteListagem.Enabled = true;
+                cbxMesListagem.Enabled = true;
+                cbxAnoListagem.Enabled = true;
+                chkListagemAno.Enabled = true;
+                chkListagemMes.Enabled = true;
+            }
+            else if (rbtListagemClientesNegativos.Checked)
+            {
+                cbxClienteListagem.Enabled = false;
+                cbxMesListagem.Enabled = false;
+                cbxAnoListagem.Enabled = false;
+                chkListagemAno.Enabled = false;
+                chkListagemMes.Enabled = false;
+            }
+        }
+
         // Geral
         private void LimparSelecao()
         {
@@ -382,6 +397,5 @@ namespace GestaoClix
             dtpMovimento.ResetText();
             dgvMovimentos.ClearSelection();
         }
-
     }
 }
