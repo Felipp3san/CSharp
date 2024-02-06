@@ -16,7 +16,7 @@ namespace GestaoClix.Controllers
         Database database = Database.getInstance();
         Cliente? cliente = null;
 
-        public void adicionarCliente(string nif, string nome, string situacao)
+        public void AdicionarCliente(string nif, string nome, string situacao)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace GestaoClix.Controllers
 
         }
 
-        public void atualizarCliente(string idCliente, string nif, string nome, string situacao) {
+        public void AtualizarCliente(string idCliente, string nif, string nome, string situacao) {
 
             cliente = null;
 
@@ -63,7 +63,7 @@ namespace GestaoClix.Controllers
             }
         }
 
-        public void removerCliente(string idCliente)
+        public void RemoverCliente(string idCliente)
         {
             cliente = null;
             
