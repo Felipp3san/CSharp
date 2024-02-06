@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Runtime.InteropServices.ObjectiveC;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.Identity.Client;
 
 namespace GestaoClix.Controllers
 {
@@ -84,8 +85,8 @@ namespace GestaoClix.Controllers
 
             if (database.Movimento is not null)
             {
-                listaMovimentos = database.Movimento.Select(movimento => new ListaMovimento
-                    {
+                listaMovimentos = database.Movimento.Select(movimento => 
+                    new ListaMovimento {
                         Id = movimento.Id,
                         Descricao = movimento.Descricao,
                         Situacao = movimento.Situacao,
@@ -100,5 +101,101 @@ namespace GestaoClix.Controllers
 
             return listaMovimentos;
         }
+
+        public List<ListaMovimento>? ListarMovimentosCliente(string idCliente)
+        {
+            List<ListaMovimento>? listaMovimentos = null;
+
+            if (database.Movimento is not null)
+            {
+                listaMovimentos = database.Movimento.Where(x => x.ClienteId == Convert.ToInt16(idCliente))
+                    .Select(movimento => new ListaMovimento {
+                        Id = movimento.Id,
+                        Descricao = movimento.Descricao,
+                        Situacao = movimento.Situacao,
+                        Data = movimento.Data.ToString("yyyy-MM-dd"),
+                        Cliente = movimento.Cliente.Nome,
+                        ClienteId = movimento.ClienteId,
+                        Valor = movimento.Valor,
+                        Tipo = movimento.Tipo.Designacao,
+                        TipoId = movimento.TipoId
+                    }).ToList();
+            }
+
+            return listaMovimentos;
+        }
+
+        public List<ListaMovimento>? ListarMovimentosClienteMesAno(string idCliente, int mes, int ano, int flag)
+        {
+
+            /* 
+               Flag 1: filtra por cliente e mes,
+               Flag 2: filtra por cliente e ano,
+               Flag 3: filtra por cliente, mes e ano.
+            */
+
+            List<ListaMovimento>? listaMovimentos = null;
+
+            if (database.Movimento is not null && flag == 1)
+            {
+                listaMovimentos = database.Movimento.Where(x => x.ClienteId == Convert.ToInt16(idCliente) && x.Data.Month == mes)
+                    .Select(movimento => new ListaMovimento {
+                        Id = movimento.Id,
+                        Descricao = movimento.Descricao,
+                        Situacao = movimento.Situacao,
+                        Data = movimento.Data.ToString("yyyy-MM-dd"),
+                        Cliente = movimento.Cliente.Nome,
+                        ClienteId = movimento.ClienteId,
+                        Valor = movimento.Valor,
+                        Tipo = movimento.Tipo.Designacao,
+                        TipoId = movimento.TipoId
+                    }).ToList();
+            }
+            else if (database.Movimento is not null && flag == 2)
+            {
+                listaMovimentos = database.Movimento.Where(x => x.ClienteId == Convert.ToInt16(idCliente) && x.Data.Year == ano)
+                    .Select(movimento => new ListaMovimento {
+                        Id = movimento.Id,
+                        Descricao = movimento.Descricao,
+                        Situacao = movimento.Situacao,
+                        Data = movimento.Data.ToString("yyyy-MM-dd"),
+                        Cliente = movimento.Cliente.Nome,
+                        ClienteId = movimento.ClienteId,
+                        Valor = movimento.Valor,
+                        Tipo = movimento.Tipo.Designacao,
+                        TipoId = movimento.TipoId
+                    }).ToList();
+            }
+            else if (database.Movimento is not null && flag == 3)
+            {
+                listaMovimentos = database.Movimento.Where(x => x.ClienteId == Convert.ToInt16(idCliente) && x.Data.Month == mes && x.Data.Year == ano)
+                    .Select(movimento => new ListaMovimento {
+                        Id = movimento.Id,
+                        Descricao = movimento.Descricao,
+                        Situacao = movimento.Situacao,
+                        Data = movimento.Data.ToString("yyyy-MM-dd"),
+                        Cliente = movimento.Cliente.Nome,
+                        ClienteId = movimento.ClienteId,
+                        Valor = movimento.Valor,
+                        Tipo = movimento.Tipo.Designacao,
+                        TipoId = movimento.TipoId
+                    }).ToList();
+            }
+
+            return listaMovimentos;
+        }
+
+        public List<ListaMovimento>? ListarClientesNegativos()
+        {
+            List<ListaMovimento>? listaMovimentos = null;
+
+            if (database.Movimento is not null)
+            {
+
+            }
+
+            return listaMovimentos;
+        }
+
     }
 }
